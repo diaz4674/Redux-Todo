@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {addTask, deleteTask} from '../Actions';
+import {addTask, toggleCompleted} from '../Actions';
 
 class Todo extends React.Component {
 
@@ -10,17 +10,23 @@ class Todo extends React.Component {
     }
 
     handleChanges = e => {
-        this.setState({ [e.target.name] : e.target.value })
+        this.setState({ [e.target.name] : e.target.value } )
     }
 
     handleClick = e => {
         e.preventDefault();
         this.props.addTask(this.state.value)
     }
+
+    toggleCompletedClick = (e, index) => {
+        e.preventDefault();
+        this.props.toggleCompleted(index)
+    }
+
     render(){
         const{value, completed} = this.props.todos
-        const todoItem = value.map(newVal => (<p> {newVal}</p>))
-        const isTaskFinished = completed.map(newVal => (<p> {newVal}</p>))
+        const todoItem = value.map((newVal, index) => ( <div> <p> {newVal}</p> <button onClick = { e => this.toggleCompletedClick(e, index)} key = {index}> Completed </button> </div>))
+
             return(
                 <div> 
                     <h1>Add an Item to your list</h1>
@@ -33,7 +39,7 @@ class Todo extends React.Component {
                             <div> 
                                 { todoItem }
                             </div>
-                            <p>{ isTaskFinished }</p>
+
                         </ul>
                     </div>       
                 </div>
@@ -51,4 +57,4 @@ const mapStateToProps = (state) =>{
     };
 };
 
-export default connect(mapStateToProps, {addTask, deleteTask})(Todo);
+export default connect(mapStateToProps, {addTask, toggleCompleted})(Todo);

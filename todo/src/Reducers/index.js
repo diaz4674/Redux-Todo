@@ -1,4 +1,4 @@
-import{ADD_TASK, DELETE_TASK} from '../Actions'
+import{ADD_TASK, TOGGLE_COMPLETED} from '../Actions'
 
 const initialState = {
     todos: [ 
@@ -10,12 +10,19 @@ const initialState = {
 export default (state = initialState, action) => {
     switch(action.type) {
         case ADD_TASK:
-        return{
-            todos: action.payload
+        const newTask = {
+            value: action.payload,
+            completed: false
         }
-        case DELETE_TASK:
         return{
-            todos: action.payload
+            ...state,
+            todos: [...state.todos, newTask]
+        }
+        case TOGGLE_COMPLETED:
+        return{
+            ...state,
+            todos: state.todos.map((todo, index) => 
+            action.payload === index ? {...todo, completed: !todo.completed } : todo)
         }
         default:
         return state;
